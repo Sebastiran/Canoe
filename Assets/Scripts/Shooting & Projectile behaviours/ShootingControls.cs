@@ -37,12 +37,12 @@ public class ShootingControls : MonoBehaviour
 
     void ReleaseShot(float force)
     {
-        newProjectile = Instantiate(currentProjectile, transform.position, firingAngle);
+        newProjectile = Instantiate(currentProjectile, transform.position, firingAngle, transform);
         newProjectile.GetComponent<ProjectileTrajectory>().SetForce(force);
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
         //Hold to charge up the shot's power (distance/damage dealt)
         if (Input.GetMouseButton(0))

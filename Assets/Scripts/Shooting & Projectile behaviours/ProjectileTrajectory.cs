@@ -22,14 +22,22 @@ public class ProjectileTrajectory : MonoBehaviour
         mySpeed = Mathf.Max(minProjectileSpeed, chargePercentage * maxProjectileSpeed);
     }
 
+    void MoveObject()
+    {
+        myRigidBody.AddForce(Vector3.forward * mySpeed);
+        myRigidBody.AddForce(Vector3.up * mySpeed);
+    }
+
     void ApplyFalloff()
     {
+        //Lower the amount of force that is being applied to the projectile so that it starts falling down due to gravity
         if (mySpeed > 0)
         {
             mySpeed -= speedDrop;
             mySpeed = Mathf.Max(mySpeed, 0);
         }
 
+        //Gradually lower the speed lost over time
         if (speedDrop > 0)
         {
             speedDrop -= speedDropSlow;
@@ -40,15 +48,17 @@ public class ProjectileTrajectory : MonoBehaviour
 
         transform.rotation = new Quaternion(newRotation, transform.rotation.y, transform.rotation.z, transform.rotation.w);
     }
+
+    public void StopProjectile()
+    {
+        myRigidBody.isKinematic = true;
+        gameObject.GetComponent<Collider>().enabled = false;
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        myRigidBody.AddForce(Vector3.forward * mySpeed);
-        myRigidBody.AddForce(Vector3.up * mySpeed);
-
+        MoveObject();
         ApplyFalloff();
-        //myPosition += Vector3.forward * Mathf.Clamp(mySpeed, 0, maxProjectileSpeed);
-        //transform.position = new Vector3(myPosition.x, myPosition.y, myPosition.z);
 	}
 }
