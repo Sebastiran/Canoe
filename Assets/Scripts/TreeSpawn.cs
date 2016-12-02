@@ -12,7 +12,6 @@ public class TreeSpawn : MonoBehaviour
 	// Use this for initialization
 	void Awake () 
 	{
-		Debug.Log(tree);
 		for (int i = 0; i < max; i++)
 		{
 			GameObject clone1 = Instantiate(tree, new Vector3(((r1 + Random.Range(-1f, 1f)) * Mathf.Cos(i) + Random.Range(-1f, 1f)), 5.2f, ((r1 + Random.Range(-1f, 1f)) * Mathf.Sin(i) + Random.Range(-1f, 1f))), Quaternion.identity) as GameObject;
