@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShootingControls : MonoBehaviour
 {
+	[SerializeField] Slider shootingCharge;
     [SerializeField] private List<GameObject> projectiles;
     [SerializeField] private float maxCharge = 3f, shotCooldown = 1.5f, minimumForce = .10f, minimumPercentage = .67f;
     [SerializeField] Quaternion firingAngle;
@@ -38,7 +40,7 @@ public class ShootingControls : MonoBehaviour
 
     void ReleaseShot(float force)
     {
-        newProjectile = Instantiate(currentProjectile, transform.position, firingAngle);
+		newProjectile = Instantiate(currentProjectile, transform.position, firingAngle) as GameObject;
         newProjectile.GetComponent<ProjectileTrajectory>().SetForce(force);
         newProjectile.tag = transform.root.tag;
     }
@@ -80,6 +82,8 @@ public class ShootingControls : MonoBehaviour
                 currentCooldown = 0;
                 shotAllowed = false;
             }
+
+			shootingCharge.value = (currentCharge / maxCharge);
         }
 
         //Switch between weapons

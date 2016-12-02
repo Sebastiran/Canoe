@@ -26,6 +26,12 @@ public class TreeSpawn : MonoBehaviour
 			clone2.transform.rotation = Quaternion.Euler(0.0f, rotDiff2, 0.0f);
 			clone1.transform.parent = gameObject.transform;
 			clone2.transform.parent = gameObject.transform;
+			//byte green1 = (byte)Random.Range(50, 255);
+			//byte green2 = (byte)Random.Range(50, 255);
+			//MeshRenderer rnd1 = clone1.GetComponentInChildren<MeshRenderer>();
+			//MeshRenderer rnd2 = clone1.GetComponentInChildren<MeshRenderer>();
+			//rnd1.material.color = new Color32(50, green1, 75, 255);
+			//rnd2.material.color = new Color32(50, green2, 75, 255);
 		}
 	}
 }
