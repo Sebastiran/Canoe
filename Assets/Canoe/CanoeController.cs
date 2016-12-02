@@ -31,7 +31,7 @@ public class CanoeController : MonoBehaviour
         if (mRigidbody.velocity.magnitude > maxSpeed)
             mRigidbody.velocity = mRigidbody.velocity.normalized * maxSpeed;
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetAxis("UsePower_" + player) > 0)
         {
             if(power)
             {

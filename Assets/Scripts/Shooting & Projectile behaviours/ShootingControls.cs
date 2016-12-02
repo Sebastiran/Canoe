@@ -37,7 +37,7 @@ public class ShootingControls : MonoBehaviour
 
     void ReleaseShot(float force)
     {
-        newProjectile = Instantiate(currentProjectile, transform.position, firingAngle, transform);
+        newProjectile = Instantiate(currentProjectile, transform.position, firingAngle, transform) as GameObject;
         newProjectile.GetComponent<ProjectileTrajectory>().SetForce(force);
     }
 
