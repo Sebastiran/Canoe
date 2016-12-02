@@ -14,8 +14,8 @@ public class TreeSpawn : MonoBehaviour
 	{
 		for (int i = 0; i < max; i++)
 		{
-			GameObject clone1 = Instantiate(tree, new Vector3(((r1 + Random.Range(-1f, 1f)) * Mathf.Cos(i) + Random.Range(-1f, 1f)), 5.2f, ((r1 + Random.Range(-1f, 1f)) * Mathf.Sin(i) + Random.Range(-1f, 1f))), Quaternion.identity) as GameObject;
-			GameObject clone2 = Instantiate(tree, new Vector3(((r2 + Random.Range(-1f, 1f)) * Mathf.Cos(i) + Random.Range(-1f, 1f)), 5.2f, ((r2 + Random.Range(-1f, 1f)) * Mathf.Sin(i) + Random.Range(-1f, 1f))), Quaternion.identity) as GameObject;
+			GameObject clone1 = Instantiate(tree, new Vector3(((r1 + Random.Range(-1f, 1f)) * Mathf.Cos(i) + Random.Range(-1f, 1f)), 5.5f, ((r1 + Random.Range(-1f, 1f)) * Mathf.Sin(i) + Random.Range(-1f, 1f))), Quaternion.identity) as GameObject;
+			GameObject clone2 = Instantiate(tree, new Vector3(((r2 + Random.Range(-1f, 1f)) * Mathf.Cos(i) + Random.Range(-1f, 1f)), 6.5f, ((r2 + Random.Range(-1f, 1f)) * Mathf.Sin(i) + Random.Range(-1f, 1f))), Quaternion.identity) as GameObject;
 			float scaleFactor1 = Random.Range(10.0f, 20.0f);
 			float scaleFactor2 = Random.Range(35.0f, 45.0f);
 			float rotDiff1 = Random.Range(0.0f, 45.0f);

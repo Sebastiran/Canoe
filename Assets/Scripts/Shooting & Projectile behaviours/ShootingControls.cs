@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ShootingControls : MonoBehaviour
 {
+	[SerializeField] private KeyCode p1Fire, p2Fire;
 	[SerializeField] Slider shootingCharge;
     [SerializeField] private List<GameObject> projectiles;
     [SerializeField] private float maxCharge = 3f, shotCooldown = 1.5f, minimumPercentage = .67f;
@@ -13,6 +14,7 @@ public class ShootingControls : MonoBehaviour
     private float currentCharge = 0, currentCooldown = 0;
     private int nextProjectileIndex;
     private bool shotAllowed = true;
+	private string playerNumber;
 
 	// Use this for initialization
 	void Start ()
@@ -38,11 +40,7 @@ public class ShootingControls : MonoBehaviour
 
     void ReleaseShot(float force)
     {
-<<<<<<< HEAD
-		newProjectile = Instantiate(currentProjectile, transform.position, firingAngle) as GameObject;
-=======
-        newProjectile = Instantiate(currentProjectile, transform.position, transform.rotation);
->>>>>>> b881e84b4a48deb51b616b43c3ab27a76c095d75
+		newProjectile = Instantiate(currentProjectile, transform.position, transform.rotation) as GameObject;
         newProjectile.GetComponent<ProjectileTrajectory>().SetForce(force);
         newProjectile.tag = transform.root.tag;
     }
@@ -61,10 +59,10 @@ public class ShootingControls : MonoBehaviour
             shotAllowed = true;
         }
 
-        if (shotAllowed)
+        if (shotAllowed && transform.root.tag == "Player1")
         {
             //Hold to charge up the shot's power (distance)
-            if (Input.GetMouseButton(0))
+			if (Input.GetKey(p1Fire))
             {
                 if (currentCharge >= maxCharge)
                 {
@@ -77,7 +75,7 @@ public class ShootingControls : MonoBehaviour
             }
 
             //Fire a projectile
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetKeyUp(p1Fire))
             {
                 ReleaseShot(currentCharge / maxCharge);
                 currentCharge = 0;
@@ -85,8 +83,36 @@ public class ShootingControls : MonoBehaviour
                 shotAllowed = false;
             }
 
-			shootingCharge.value = (currentCharge / maxCharge);
+			shootingCharge.value = (currentCharge / maxCharge) - minimumPercentage;
         }
+
+		else if(shotAllowed && transform.root.tag == "Player2")
+
+		{
+			//Hold to charge up the shot's power (distance)
+			if (Input.GetKey(p2Fire))
+			{
+				if (currentCharge >= maxCharge)
+				{
+					currentCharge = maxCharge;
+				}
+				else
+				{
+					currentCharge += Time.deltaTime;
+				}
+			}
+
+			//Fire a projectile
+			if (Input.GetKeyUp(p2Fire))
+			{
+				ReleaseShot(currentCharge / maxCharge);
+				currentCharge = 0;
+				currentCooldown = 0;
+				shotAllowed = false;
+			}
+
+			shootingCharge.value = (currentCharge / maxCharge) - minimumPercentage;
+		}
 
         //Switch between weapons
         if (Input.GetKeyDown(weaponSwitchKey))

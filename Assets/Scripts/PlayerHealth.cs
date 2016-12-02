@@ -18,6 +18,7 @@ public class PlayerHealth : MonoBehaviour
 	void Update()
 	{ 
 		healthBar.value = (currentHealth / 100.0f);
+		Debug.Log(currentHealth);
 	}
 
     public void ApplyDamage(float damageTaken)
