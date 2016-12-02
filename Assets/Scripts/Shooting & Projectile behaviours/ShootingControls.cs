@@ -5,17 +5,18 @@ using UnityEngine;
 public class ShootingControls : MonoBehaviour
 {
     [SerializeField] private List<GameObject> projectiles;
-    [SerializeField] private float maxCharge = 3f, shotCooldown = 1.5f, minimumForce = .10f;
+    [SerializeField] private float maxCharge = 3f, shotCooldown = 1.5f, minimumForce = .10f, minimumPercentage = .67f;
     [SerializeField] Quaternion firingAngle;
     [SerializeField] private KeyCode weaponSwitchKey;
     private GameObject currentProjectile, newProjectile;
     private float currentCharge = 0, currentCooldown = 0;
     private int nextProjectileIndex;
-    private bool shotCharging = false;
+    private bool shotAllowed = true;
 
 	// Use this for initialization
 	void Start ()
     {
+        Mathf.Clamp01(minimumPercentage);
         currentProjectile = projectiles[0];
         firingAngle = transform.rotation;
 	}
@@ -37,31 +38,48 @@ public class ShootingControls : MonoBehaviour
 
     void ReleaseShot(float force)
     {
-        newProjectile = Instantiate(currentProjectile, transform.position, firingAngle, transform);
+        newProjectile = Instantiate(currentProjectile, transform.position, firingAngle);
         newProjectile.GetComponent<ProjectileTrajectory>().SetForce(force);
+        newProjectile.tag = transform.root.tag;
     }
 
     // Update is called once per frame
     void Update ()
     {
-        //Hold to charge up the shot's power (distance/damage dealt)
-        if (Input.GetMouseButton(0))
+        if (currentCooldown < shotCooldown)
         {
-            if (currentCharge >= maxCharge)
-            {
-                currentCharge = maxCharge;
-            }
-            else
-            {
-                currentCharge += Time.deltaTime;
-            }
+            currentCooldown += Time.deltaTime;
+        }
+        else if (currentCooldown > shotCooldown)
+        {
+            currentCooldown = shotCooldown;
+            currentCharge = maxCharge * minimumPercentage;
+            shotAllowed = true;
         }
 
-        //Fire a projectile
-        if (Input.GetMouseButtonUp(0))
+        if (shotAllowed)
         {
-            ReleaseShot(Mathf.Max(minimumForce, (currentCharge / maxCharge)));
-            currentCharge = 0;
+            //Hold to charge up the shot's power (distance/damage dealt)
+            if (Input.GetMouseButton(0))
+            {
+                if (currentCharge >= maxCharge)
+                {
+                    currentCharge = maxCharge;
+                }
+                else
+                {
+                    currentCharge += Time.deltaTime;
+                }
+            }
+
+            //Fire a projectile
+            if (Input.GetMouseButtonUp(0))
+            {
+                ReleaseShot(Mathf.Max(minimumForce, (currentCharge / maxCharge)));
+                currentCharge = 0;
+                currentCooldown = 0;
+                shotAllowed = false;
+            }
         }
 
         //Switch between weapons
@@ -69,7 +87,5 @@ public class ShootingControls : MonoBehaviour
         {
             ChangeProjectile();
         }
-
-        currentCooldown += Time.deltaTime;
 	}
 }

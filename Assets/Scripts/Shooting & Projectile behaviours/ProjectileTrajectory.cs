@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class ProjectileTrajectory : MonoBehaviour
 {
-    [SerializeField] private float maxProjectileSpeed = 100f, percentageOfMaxSpeed = 0.67f, initialSpeedDrop = 6f, speedDropSlow = 0.25f;
-    private float mySpeed, minProjectileSpeed, newRotation, speedDrop;
+    [SerializeField] private float maxProjectileSpeed = 100f, initialSpeedDrop = 6f, speedDropSlow = 0.25f, rotationSpeed = 50;
+    private float mySpeed, charge, speedDrop;
     private Rigidbody myRigidBody;
+    private bool freezeObject = false;
 
 	// Use this for initialization
 	void Awake()
     {
         myRigidBody = GetComponent<Rigidbody>();
-        newRotation = transform.rotation.x;
-        minProjectileSpeed = maxProjectileSpeed * percentageOfMaxSpeed;
         speedDrop = initialSpeedDrop;
 	}
 
     public void SetForce(float chargePercentage)
     {
-        mySpeed = Mathf.Max(minProjectileSpeed, chargePercentage * maxProjectileSpeed);
+        charge = chargePercentage;
+        mySpeed = Mathf.Max(0, charge * maxProjectileSpeed);
     }
 
     void MoveObject()
@@ -44,21 +44,22 @@ public class ProjectileTrajectory : MonoBehaviour
             speedDrop = Mathf.Max(speedDrop, 0);
         }
 
-        newRotation -= speedDrop;
-
-        transform.rotation = new Quaternion(newRotation, transform.rotation.y, transform.rotation.z, transform.rotation.w);
+        transform.Rotate(Time.deltaTime * rotationSpeed * Mathf.Clamp((1-charge), charge, 1), 0, 0);
     }
 
     public void StopProjectile()
     {
         myRigidBody.isKinematic = true;
         gameObject.GetComponent<Collider>().enabled = false;
+        freezeObject = true;
     }
 	
-	// Update is called once per frame
 	void FixedUpdate ()
     {
-        MoveObject();
-        ApplyFalloff();
+        if (!freezeObject)
+        {
+            MoveObject();
+            ApplyFalloff();
+        }
 	}
 }
