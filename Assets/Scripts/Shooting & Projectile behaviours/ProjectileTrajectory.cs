@@ -24,7 +24,7 @@ public class ProjectileTrajectory : MonoBehaviour
 
     void MoveObject()
     {
-        myRigidBody.AddForce(Vector3.forward * mySpeed);
+        myRigidBody.AddForce(transform.forward * mySpeed);
         myRigidBody.AddForce(Vector3.up * mySpeed);
     }
 

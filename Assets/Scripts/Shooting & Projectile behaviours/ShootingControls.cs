@@ -5,8 +5,7 @@ using UnityEngine;
 public class ShootingControls : MonoBehaviour
 {
     [SerializeField] private List<GameObject> projectiles;
-    [SerializeField] private float maxCharge = 3f, shotCooldown = 1.5f, minimumForce = .10f, minimumPercentage = .67f;
-    [SerializeField] Quaternion firingAngle;
+    [SerializeField] private float maxCharge = 3f, shotCooldown = 1.5f, minimumPercentage = .67f;
     [SerializeField] private KeyCode weaponSwitchKey;
     private GameObject currentProjectile, newProjectile;
     private float currentCharge = 0, currentCooldown = 0;
@@ -18,7 +17,6 @@ public class ShootingControls : MonoBehaviour
     {
         Mathf.Clamp01(minimumPercentage);
         currentProjectile = projectiles[0];
-        firingAngle = transform.rotation;
 	}
 
     void ChangeProjectile()
@@ -38,7 +36,7 @@ public class ShootingControls : MonoBehaviour
 
     void ReleaseShot(float force)
     {
-        newProjectile = Instantiate(currentProjectile, transform.position, firingAngle);
+        newProjectile = Instantiate(currentProjectile, transform.position, transform.rotation);
         newProjectile.GetComponent<ProjectileTrajectory>().SetForce(force);
         newProjectile.tag = transform.root.tag;
     }
@@ -59,7 +57,7 @@ public class ShootingControls : MonoBehaviour
 
         if (shotAllowed)
         {
-            //Hold to charge up the shot's power (distance/damage dealt)
+            //Hold to charge up the shot's power (distance)
             if (Input.GetMouseButton(0))
             {
                 if (currentCharge >= maxCharge)
@@ -75,7 +73,7 @@ public class ShootingControls : MonoBehaviour
             //Fire a projectile
             if (Input.GetMouseButtonUp(0))
             {
-                ReleaseShot(Mathf.Max(minimumForce, (currentCharge / maxCharge)));
+                ReleaseShot(currentCharge / maxCharge);
                 currentCharge = 0;
                 currentCooldown = 0;
                 shotAllowed = false;
